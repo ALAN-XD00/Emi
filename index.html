@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171925">
+  <title>Una constelación para Emi</title>
+  <style>
+    :root {
+      --bg: #171925;
+      --panel: #202333;
+      --panel-soft: #25283a;
+      --text: #e8e5ed;
+      --muted: #b7b3c2;
+      --accent: #aaa2c2;
+      --line: #414254;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: radial-gradient(circle at 15% 0%, #343147 0, transparent 34%),
+                  radial-gradient(circle at 90% 35%, #263448 0, transparent 32%), var(--bg);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+    }
+    a { color: inherit; }
+    .wrap { width: min(920px, calc(100% - 32px)); margin: auto; }
+    .hero {
+      min-height: 78vh;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 70px 16px;
+    }
+    .moon { font-size: 42px; color: #c7c0d9; }
+    .tiny { color: var(--accent); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: Georgia, 'Times New Roman', serif; font-weight: 400; }
+    h1 { font-size: clamp(42px, 9vw, 68px); line-height: 1.05; margin: 12px 0; }
+    .hero p { max-width: 520px; color: var(--muted); margin: 0 auto 24px; }
+    .date { color: var(--muted); font-size: 12px; letter-spacing: .12em; }
+    .link-button {
+      display: inline-block; margin-top: 28px; padding: 10px 18px;
+      border: 1px solid var(--line); border-radius: 24px; text-decoration: none;
+      font-size: 12px; color: var(--text);
+    }
+    .intro { text-align: center; margin: 10px auto 28px; }
+    .intro h2 { font-size: 28px; margin: 6px 0; }
+    .intro p, .muted { color: var(--muted); font-size: 14px; }
+    .constellation-wrap {
+      max-width: 760px; margin: 0 auto; padding: 12px 8px 18px;
+      background: #17192588; border: 1px solid var(--line); border-radius: 16px;
+    }
+    .constellation { display: block; width: 100%; height: auto; overflow: visible; }
+    .constellation .lines { fill: none; stroke: #85819f; stroke-width: 1.7; opacity: .72; }
+    .constellation a { cursor: pointer; outline: none; }
+    .constellation .star { fill: #d8d1ec; stroke: #aaa2c2; stroke-width: 2; transition: r .18s, fill .18s, filter .18s; }
+    .constellation a:hover .star, .constellation a:focus .star { fill: #fff; filter: drop-shadow(0 0 7px #d8d1ec); }
+    .constellation .star-label { fill: #e8e5ed; font: 13px Arial, sans-serif; letter-spacing: .02em; }
+    .constellation .hint { fill: #aaa2c2; font: 10px Arial, sans-serif; letter-spacing: .14em; }
+    .constellation a:focus .star-label { fill: #fff; text-decoration: underline; }
+    .constellation-note { margin: 0; padding: 0 12px 8px; color: var(--muted); text-align: center; font-size: 12px; }
+    section { padding-top: 65px; scroll-margin-top: 20px; }
+    .section-title { text-align: center; margin-bottom: 18px; }
+    .section-title .symbol { font-size: 26px; }
+    .section-title h2 { margin: 4px 0; font-size: 28px; }
+    .section-title p { margin: 0; color: var(--muted); font-size: 13px; }
+    .panel {
+      background: #202333eF; border: 1px solid var(--line); border-radius: 15px;
+      padding: 20px; max-width: 760px; margin: auto;
+    }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .item { background: var(--panel-soft); border-radius: 12px; padding: 15px; min-width: 0; }
+    .item h3 { margin: 0 0 5px; font-size: 19px; }
+    .item p { margin: 0; color: var(--muted); font-size: 13px; }
+    .photo {
+      display: block; width: 100%; max-height: 260px; object-fit: contain;
+      margin-top: 12px; border-radius: 9px; background: #171925;
+    }
+    .photo[hidden] { display: none; }
+    .placeholder {
+      margin-top: 12px; padding: 15px; border: 1px dashed #66647a;
+      border-radius: 9px; text-align: center; color: #aaa6b7; font-size: 12px;
+    }
+    .placeholder[hidden] { display: none; }
+    .tags { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .tag { border: 1px solid #555267; border-radius: 20px; padding: 5px 11px; color: #d4d0df; font-size: 12px; }
+    .center { text-align: center; }
+    .music-link { display: inline-block; margin-top: 10px; color: #d4cde5; font-size: 13px; }
+    audio { width: 100%; margin-top: 12px; }
+    .memory { margin-top: 12px; }
+    .letter { white-space: pre-line; color: #ded9e8; font-size: 14px; }
+    .footer { text-align: center; padding: 60px 10px 25px; color: var(--muted); font-size: 12px; }
+    .back { display: block; text-align: center; margin-top: 28px; color: var(--accent); text-decoration: none; font-size: 12px; }
+    @media (max-width: 430px) {
+      .grid { grid-template-columns: 1fr; }
+      .hero { min-height: 70vh; }
+      .constellation-wrap { padding: 6px 2px 12px; }
+      .constellation .star-label { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="hero" id="inicio">
+    <div>
+      <div class="moon">☾</div>
+      <div class="tiny">un pequeño regalo</div>
+      <h1>Una constelación<br><i>para Emi</i></h1>
+      <div class="date">09 · 11 · 2026</div>
+      <a class="link-button" href="#estrellas">VER EL REGALO ↓</a>
+    </div>
+  </header>
+
+  <main class="wrap" id="estrellas">
+    <div class="intro">
+      <div class="tiny">elige una estrella</div>
+      <h2>Tu constelación</h2>
+      <p>Cada estrella abre una parte de este rincón.</p>
+    </div>
+
+    <div class="constellation-wrap">
+      <svg class="constellation" viewBox="0 0 620 410" role="img" aria-labelledby="scorpio-title scorpio-desc">
+        <title id="scorpio-title">Constelación de Escorpio</title>
+        <desc id="scorpio-desc">Ocho estrellas conectadas en la forma de Escorpio. Cada estrella es un enlace a una sección del regalo.</desc>
+        <path class="lines" d="M430 76 L475 102 L505 145 L455 177 L395 205 L335 235 L275 278 L220 320 L165 300 L135 255 L160 210" />
+        <path class="lines" d="M430 76 L395 205" opacity=".25" />
+        <g opacity=".55" fill="#aaa2c2">
+          <circle cx="90" cy="95" r="1.5"/><circle cx="115" cy="160" r="1"/><circle cx="535" cy="70" r="1.5"/>
+          <circle cx="555" cy="250" r="1"/><circle cx="355" cy="330" r="1.4"/><circle cx="70" cy="300" r="1"/>
+          <circle cx="500" cy="345" r="1.3"/><circle cx="250" cy="70" r="1"/>
+        </g>
+        <a href="#teyvat" aria-label="Abrir Teyvat">
+          <circle class="star" cx="430" cy="76" r="8"/><text class="star-label" x="447" y="69">Teyvat</text>
+        </a>
+        <a href="#anime" aria-label="Abrir Anime">
+          <circle class="star" cx="475" cy="102" r="7"/><text class="star-label" x="489" y="105">Anime</text>
+        </a>
+        <a href="#animales" aria-label="Abrir Animalitos">
+          <circle class="star" cx="505" cy="145" r="8"/><text class="star-label" x="520" y="150">Animalitos</text>
+        </a>
+        <a href="#musica" aria-label="Abrir Música">
+          <circle class="star" cx="455" cy="177" r="7"/><text class="star-label" x="470" y="181">Música</text>
+        </a>
+        <a href="#detalles" aria-label="Abrir Detalles">
+          <circle class="star" cx="335" cy="235" r="8"/><text class="star-label" x="349" y="229">Detalles</text>
+        </a>
+        <a href="#recuerdos" aria-label="Abrir Recuerdos">
+          <circle class="star" cx="220" cy="320" r="8"/><text class="star-label" x="235" y="325">Recuerdos</text>
+        </a>
+        <a href="#carta" aria-label="Abrir el mensaje">
+          <circle class="star" cx="135" cy="255" r="8"/><text class="star-label" x="25" y="249">Un mensaje</text>
+        </a>
+        <a href="#final" aria-label="Abrir la sorpresa final">
+          <circle class="star" cx="160" cy="210" r="9"/><text class="star-label" x="42" y="205">Sorpresa</text>
+        </a>
+        <text class="hint" x="310" y="385" text-anchor="middle">ESCORPIO · 8 ESTRELLAS · 8 SECCIONES</text>
+      </svg>
+      <p class="constellation-note">Toca cualquiera de las estrellas para entrar a esa sección.</p>
+    </div>
+
+    <section id="teyvat">
+      <div class="section-title"><div class="symbol">✦</div><h2>Un poquito de Teyvat</h2></div>
+      <div class="panel">
+        <div class="grid">
+          <article class="item"><h3>Xiao</h3>
+            <img class="photo" src="assets/images/xiao.png" alt="Xiao" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+            <div class="placeholder">Aquí va la imagen de Xiao.</div>
+          </article>
+          <article class="item"><h3>Furina</h3>
+            <img class="photo" src="assets/images/furina.png" alt="Furina" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+            <div class="placeholder">Aquí va la imagen de Furina.</div>
+          </article>
+          <article class="item"><h3>Neuvillette</h3>
+            <img class="photo" src="assets/images/neuvillette.png" alt="Neuvillette" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+            <div class="placeholder">Aquí va la imagen de Neuvillette.</div>
+          </article>
+          <article class="item"><h3>Mondstadt</h3>
+            <img class="photo" src="assets/images/mondstadt.jpg" alt="Mondstadt" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+            <div class="placeholder">Si quieres, agrega una imagen de Mondstadt.</div>
+          </article>
+        </div>
+        <div class="tags"><span class="tag">Anemo</span><span class="tag">Electro</span><span class="tag">Mondstadt</span></div>
+      </div>
+    </section>
+
+    <section id="anime">
+      <div class="section-title"><div class="symbol">✧</div><h2>Un poco de anime</h2><p>Dos personajes que te gustan mucho.</p></div>
+      <div class="panel grid">
+        <article class="item"><h3>Elizabeth</h3><p>Nanatsu no Taizai</p>
+          <img class="photo" src="assets/images/elizabeth.png" alt="Elizabeth" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+          <div class="placeholder">Imagen de Elizabeth.</div>
+        </article>
+        <article class="item"><h3>Tsukasa</h3><p>Jibaku Shounen Hanako-kun</p>
+          <img class="photo" src="assets/images/tsukasa.png" alt="Tsukasa" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+          <div class="placeholder">Imagen de Tsukasa.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="animales">
+      <div class="section-title"><div class="symbol">♡</div><h2>Lechuzas y gatitos</h2></div>
+      <div class="panel grid">
+        <article class="item"><h3>Lechuzas</h3>
+          <img class="photo" src="assets/images/lechuzas.jpg" alt="Lechuzas" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+          <div class="placeholder">Agrega aquí alguna lechuza.</div>
+        </article>
+        <article class="item"><h3>Tus Gatitos</h3>
+          <img class="photo" src="assets/images/gatitos.jpg" alt="Gatitos" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+          <div class="placeholder">Agrega aquí algunos gatitos.</div>
+        </article>
+      </div>
+    </section>
+
+    <section id="musica">
+      <div class="section-title"><div class="symbol">♫</div><h2>Musica para tu cumple</h2></div>
+      <div class="panel center">
+        <div class="placeholder">Si agregas un MP3 a assets/audio/ y lo llamas cancion.mp3, aparecerá aquí el reproductor.</div>
+        <audio controls preload="none" src="assets/audio/cancion.mp3" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true"></audio>
+      </div>
+    </section>
+
+    <section id="detalles">
+      <div class="section-title"><div class="symbol">🧣</div><h2>Pequeños detalles</h2></div>
+      <div class="panel grid">
+        <article class="item"><h3>Bufandas</h3>
+          <img class="photo" src="assets/images/bufanda.jpg" alt="Bufanda" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+          <div class="placeholder">Puedes poner una foto o una ilustración de una bufanda.</div>
+        </article>
+        <article class="item"><h3>Tus colores</h3><p>Para mi, tus colores son: Morado opaco, azul grisáceo y negro. Sin demasiadas cosas, solo algo tranquilo.</p>
+          <div class="tags"><span class="tag">Morado</span><span class="tag">Azul</span><span class="tag">Negro</span></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="recuerdos">
+      <div class="section-title"><div class="symbol">☾</div><h2>Algunos recuerdos</h2></div>
+      <div class="panel">
+        <div class="item memory"><h3>Un recuerdo</h3>
+          <img class="photo" src="assets/images/recuerdo-1.jpg" alt="Recuerdo 1" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+        </div>
+        <div class="item memory"><h3>Otro recuerdo</h3>
+          <img class="photo" src="assets/images/recuerdo-2.jpg" alt="Recuerdo 2" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+        </div>
+      </div>
+    </section>
+
+    <section id="carta">
+      <div class="section-title"><div class="symbol">✉</div><h2>Un mensaje para ti</h2></div>
+      <div class="panel letter">Feliz cumpleaños, Emi. 💗
+
+Hola niñam, hoy día que es tu cumpleaños te deseo mucha felicidad, quizás pienses que por la distancia y cosas así, solo eres una amiga más para mí, pero no lo eres, eres la persona más importante que tengo, eres mi persona favorita.
+
+Te amo con todo mi corazón, mi alma y mi cuerpo. Te amo, te deseo y te quiero.
+
+— Alan</div>
+    </section>
+
+    <section id="final">
+      <div class="section-title"><div class="symbol">★</div><h2>Antes de irte...</h2><p>Una última cosita.</p></div>
+      <div class="panel center">
+        <img class="photo" src="assets/images/sorpresa.jpg" alt="Sorpresa" onload="this.nextElementSibling.hidden=true" onerror="this.hidden=true">
+        <div class="placeholder">Aquí puedes poner una foto, un collage, un sticker o una pequeña sorpresa.</div>
+        <p>Espero que te haya gustado esta pequeña constelación. Feliz cumpleaños. ✦</p>
+      </div>
+    </section>
+
+  </main>
+</body>
+</html>
